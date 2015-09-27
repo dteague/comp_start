@@ -1,0 +1,68 @@
+#User aliases
+
+#ssh aliases
+
+alias tester='echo $HOME'
+alias accre='ssh -Y teaguedo@vmplogin.accre.vanderbilt.edu'
+alias cern='ssh -X dteague@lxplus.cern.ch'
+alias cms='ssh dteague@cmsusr0.cern.ch'
+alias setup='unset POS;POS=${PWD};cd ~/root;. bin/thisroot.sh;cd $POS'
+alias lpc='ssh -Xt dteague@cmslpc-sl5.fnal.gov exec /bin/bash'
+alias rmerr='sudo rm /var/crash/*'
+alias emnw='emacs -nw'
+alias authlpc='kinit dteague@FNAL.GOV'
+alias path='echo -e ${PATH//:/\\n}'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lsd="ls -lF | grep /$"
+alias lsda="ls -alF | grep /$"
+alias lsf='ls -plF | grep -v /' 
+
+extract () {
+   if [ -f $1 ] ; then
+       case $1 in
+           *.tar.bz2)   tar xvjf $1    ;;
+           *.tar.gz)    tar xvzf $1    ;;
+           *.bz2)       bunzip2 $1     ;;
+           *.rar)       unrar x $1       ;;
+           *.gz)        gunzip $1      ;;
+           *.tar)       tar xvf $1     ;;
+           *.tbz2)      tar xvjf $1    ;;
+           *.tgz)       tar xvzf $1    ;;
+           *.zip)       unzip $1       ;;
+           *.Z)         uncompress $1  ;;
+           *.7z)        7z x $1        ;;
+           *)           echo "don't know how to extract '$1'..." ;;
+       esac
+   else
+       echo "'$1' is not a valid file!"
+   fi
+ }
+
+up(){
+  local d=""
+  limit=$1
+  for ((i=1 ; i <= limit ; i++))
+    do
+      d=$d/..
+    done
+  d=$(echo $d | sed 's/^\///')
+  if [ -z "$d" ]; then
+    d=..
+  fi
+  cd $d
+}
+
