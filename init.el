@@ -1,10 +1,10 @@
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;;  __  ______  ___  ____  ______ __ __ ____  ;;
- ;; (( \ | || | // \\ || \\ | || | || || || \\ ;;
- ;;  \\    ||   ||=|| ||_//   ||   || || ||_// ;;
- ;; \_))   ||   || || || \\   ||   \\_// ||    ;;
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                          
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  __  ______  ___  ____  ______ __ __ ____  ;;
+;; (( \ | || | // \\ || \\ | || | || || || \\ ;;
+;;  \\    ||   ||=|| ||_//   ||   || || ||_// ;;
+;; \_))   ||   || || || \\   ||   \\_// ||    ;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup packages and package handler ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,18 +16,29 @@
 (package-initialize)
 (setq inhibit-startup-screen t)
 (eval-when-compile (require 'use-package))
-
-
+(setq use-package-always-ensure t)
 ;;;;;;;;;;;;;;;;;;;;
 ;; Setup of Theme ;;
 ;;;;;;;;;;;;;;;;;;;;
-(load-theme 'dracula t)
+
+;; need for doom modeline to work correctly
+(use-package doom-themes)
+
+(load-theme 'doom-dracula t)
 (load-theme 'org-beautify t)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; currently installed themes (only dark ones) ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-   ;; deeper-blue, dracula, manoj-dark, misterioso, org-beautify, 
-   ;; shrek, tango-dark, tsdh-dark, wombat
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(toggle-scroll-bar -1)
+(fringe-mode 1)
+(setq use-dialog-box nil)
+(setq exwm-floating-border-width 3)
+(setq exwm-floating-border-color "orange")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; currently installed themes (only dark and doom ones) ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Iosvkem, challenger-deep, city-light, dracula, molokai, nord,
+;; nova, one, opera, peacock, sourcerer, spacegrey, tomorrow-day,
+;; tomorrow-night, vibrant
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; setup beginning looks ;;
@@ -36,13 +47,13 @@
 ;; may make this file the set up script, but eh
 ;;(load "~/.emacs.d/my_ibuffer.el")
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;;  ____ __ __ __  __   ___ ______ __   ___   __  __  __  ;;
- ;; ||    || || ||\ ||  //   | || | ||  // \\  ||\ || (( \ ;;
- ;; ||==  || || ||\\|| ((      ||   || ((   )) ||\\||  \\  ;;
- ;; ||    \\_// || \||  \\__   ||   ||  \\_//  || \|| \_)) ;;
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                                      
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  ____ __ __ __  __   ___ ______ __   ___   __  __  __  ;;
+;; ||    || || ||\ ||  //   | || | ||  // \\  ||\ || (( \ ;;
+;; ||==  || || ||\\|| ((      ||   || ((   )) ||\\||  \\  ;;
+;; ||    \\_// || \||  \\__   ||   ||  \\_//  || \|| \_)) ;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Terminal: set up with terminal ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,11 +71,13 @@
 ;; the terminal (NEED TO WORK ON)		    ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load-file "~/.emacs.d/dired+.el")
+(setq diredp-hide-details-initially-flag nil)
+(setq diredp-hide-details-propagate-flag nil)
+(diredp-toggle-find-file-reuse-dir 1)
 
-
-(require `dired-x)
 (defun dired-open-term ()
-;;   "Open an `ansi-term' that corresponds to current directory."
+  ;;   "Open an `ansi-term' that corresponds to current directory."
   (interactive)
   (let ((current-dir (dired-current-directory)))
     (term-send-string
@@ -72,7 +85,6 @@
      (if (file-remote-p current-dir)
 	 (progn (switch-to-buffer "*uwcern*")
 		(format "cd '%s'\n" current-dir)))
-	 
      ;; (if (file-remote-p current-dir)
      ;;     (let ((v (tramp-dissect-file-name current-dir t)))
      ;;       (format "ssh %s@%s\n"
@@ -90,8 +102,8 @@
 
 (require 'term)
 (defun expose-global-binding-in-term (binding)
-   (define-key term-raw-map binding 
-     (lookup-key (current-global-map) binding)))
+  (define-key term-raw-map binding 
+    (lookup-key (current-global-map) binding)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Command to kill terminal buffer after it's finished ;;
@@ -108,13 +120,13 @@
 (add-hook 'term-exec-hook 'oleh-term-exec-hook)
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; ____   ___    ___ __ __  ___    ___   ____  __  ;;
- ;; || \\ // \\  //   || // // \\  // \\ ||    (( \ ;;
- ;; ||_// ||=|| ((    ||<<  ||=|| (( ___ ||==   \\  ;;
- ;; ||    || ||  \\__ || \\ || ||  \\_|| ||___ \_)) ;;
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                                
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ____   ___    ___ __ __  ___    ___   ____  __  ;;
+;; || \\ // \\  //   || // // \\  // \\ ||    (( \ ;;
+;; ||_// ||=|| ((    ||<<  ||=|| (( ___ ||==   \\  ;;
+;; ||    || ||  \\__ || \\ || ||  \\_|| ||___ \_)) ;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                Ace Window	                ;;
@@ -122,27 +134,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package ace-window
-  :ensure t
   :config
   (progn
     (global-set-key (kbd "M-o") 'ace-window)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (expose-global-binding-in-term (kbd "M-o"))))
 
-;;Extra bit of code to allow Ace window to work in terminal
-(expose-global-binding-in-term (kbd "M-o"))
-
-;; Elpy
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;       Elpy	        ;;
+;; Fancy python helper  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package elpy
-  :ensure t
   :config
   (progn
     (elpy-enable)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                  Buffer move			        ;;
+;; Nice way to move buffers around to different windows ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package buffer-move
-  :ensure t
   :config
   (progn
     (global-set-key (kbd "S-<left>")  'buf-move-left)
@@ -151,13 +164,55 @@
     (global-set-key (kbd "S-<down>")  'buf-move-down)
     ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      eterm 256color	      ;;
+;; Make Ansi-term have color! ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package eterm-256color
+  :config
+  (eterm-256color-mode t)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;           IBuffer		 ;;
+;; Makes Buffer look 100x better ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package ibuffer
+  :config
+  (global-set-key (kbd "C-x C-b")  'ibuffer))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                          God Mode				   ;;
+;; Allows for "modes" similar to vim and removes the need for Ctrl ;;
+;; bound to Ctrl-Enter						   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package god-mode
+  :config
+  (global-set-key (kbd "C-<return>") 'god-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                 Company Mode			      ;;
+;; Autocomplete software			      ;;
+;; Needs clang so might switch (because of ssh stuff) ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'after-init-hook 'global-company-mode)
 
-(setq password-cache-expiry nil)
 
-(global-set-key (kbd "M-g M-g") 'avy-goto-line)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                          Avy				      ;;
+;; Package used for jumping to words/lines with asdf keys     ;;
+;; I only like the avy-goto-line (swiper works better for me) ;;
+;; and even goto-line is an iffy time saver...		      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package avy
+  :config
+  (global-set-key (kbd "M-g M-g") 'avy-goto-line))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                  Swiper   (Needs Counsel)			      ;;
@@ -166,20 +221,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; it looks like counsel is a requirement for swiper
-(use-package counsel
-  :ensure t
-  )
+(use-package counsel)
 
 (use-package swiper
-  :ensure t
   :config
   (progn
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
     (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "M-%") 'swiper-query-replace)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
     (global-set-key (kbd "C-r") 'ivy-resume)
     (global-set-key (kbd "<f6>") 'ivy-resume)
     (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "M-y") 'counsel-yank-pop)
     (global-set-key (kbd "C-x C-f") 'counsel-find-file)
     (global-set-key (kbd "<f1> f") 'counsel-describe-function)
     (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
@@ -201,20 +258,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package smartparens
-  :ensure t
   :config
   (progn
     (smartparens-global-mode t)
     (global-set-key (kbd "C-'") 'sp-forward-slurp-sexp)
-    ))
-
-
-
-(use-package resize-window
-  :ensure t
-  :config
-  (progn
-    (global-set-key (kbd "C-c ;") 'resize-window)
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -223,15 +270,28 @@
 ;; but looks nice. It's set to have a Golden Ratio, may change... ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package zoom
-  :ensure t
+;; (use-package zoom
+;;   :config
+;;   (progn
+;;     (zoom-mode t)
+;;     (custom-set-variables
+;;      '(zoom-size '(0.618 . 0.75)
+;; 		 ;;     '(zoom-ignored-major-modes '(dired-mode))
+;; 		 ))))
+
+(use-package aggressive-indent
   :config
   (progn
-    (zoom-mode t)
-    (custom-set-variables
-     '(zoom-size '(0.618 . 0.618))
-;;     '(zoom-ignored-major-modes '(dired-mode))
-     )))
+    ;; Turned on everywhere, but can add exceptions below
+    (global-aggressive-indent-mode 1)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode)))
+
+;;; Doesn't work with zoom on
+(use-package resize-window
+  :config
+  (progn
+    (global-set-key (kbd "C-c ;") 'resize-window)
+    ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -240,38 +300,56 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package doom-modeline
-      :ensure t
-      :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (progn (setq find-file-visit-truename t)
+	 (setq doom-modeline-height 10)
+	 (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;     Magit	     ;;
+;; Git but in emacs! ;;
+;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package magit
-  :ensure t
   :config
   (global-set-key (kbd "C-x g") 'magit-status)
   )
 
-;;;; NEED TO edit this to open correct stuff!
-;;https://bitbucket.org/jpkotta/openwith/src/default/README.txt
-(use-package openwith
+
+(use-package rainbow-delimiters
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'prog-mode-hook (show-paren-mode))))
+
+(set-face-background 'show-paren-match-face "#FFFFFF")
+
+(use-package dmenu
   :ensure t
   :config
-  (openwith-mode t)
-  )
+  (global-set-key (kbd "M-<return>") 'dmenu))
+
+;; ;;;; NEED TO edit this to open correct stuff!
+;; ;;https://bitbucket.org/jpkotta/openwith/src/default/README.txt
+;; (use-package openwith
+;;   :ensure t
+;;   :config
+;;   (openwith-mode t)
+;;   )
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; ___  ___ __  __    ___  ____ __    __     ___  __  __  ____   ___   __ __  __  ;;
- ;; ||\\//|| || (( \  //   ||    ||    ||    // \\ ||\ || ||     // \\  || || (( \ ;;
- ;; || \/ || ||  \\  ((    ||==  ||    ||    ||=|| ||\\|| ||==  ((   )) || ||  \\  ;;
- ;; ||    || || \_))  \\__ ||___ ||__| ||__| || || || \|| ||___  \\_//  \\_// \_)) ;;
+;; ___  ___ __  __    ___  ____ __    __     ___  __  __  ____   ___   __ __  __  ;;
+;; ||\\//|| || (( \  //   ||    ||    ||    // \\ ||\ || ||     // \\  || || (( \ ;;
+;; || \/ || ||  \\  ((    ||==  ||    ||    ||=|| ||\\|| ||==  ((   )) || ||  \\  ;;
+;; ||    || || \_))  \\__ ||___ ||__| ||__| || || || \|| ||___  \\_//  \\_// \_)) ;;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Allow pasting from other programs
 (setq x-select-enable-clipboard t)
 (setq term-scroll-show-maximum-output 0)
-
-
-
-
+(setq password-cache-expiry nil)
 
 
 ;;;;;;;;;;;;;;;;;;
@@ -286,7 +364,7 @@
 
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-;(load 'init-csv)
+					;(load 'init-csv)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -303,12 +381,12 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (setq org-file-apps
       '(("\\.docx\\'" . default)
-       ("\\.odt\\'" . default)
-      ("\\.mm\\'" . default)
-      ("\\.x?html?\\'" . default)
-      ("\\.pdf\\'" . default)
-      ("\\.pdf::\\([0-9]+\\)\\'" . "evince \"%s\" -p %1")
-      (auto-mode . emacs)))
+	("\\.odt\\'" . default)
+	("\\.mm\\'" . default)
+	("\\.x?html?\\'" . default)
+	("\\.pdf\\'" . default)
+	("\\.pdf::\\([0-9]+\\)\\'" . "evince \"%s\" -p %1")
+	(auto-mode . emacs)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -317,7 +395,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("cc4e95929ebadaa3f2e9ac462b6594f02c41742efbe8505335f5a67b36cec21c" "4639288d273cbd3dc880992e6032f9c817f17c4a91f00f3872009a099f5b3f84" "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+    ("6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "9954ed41d89d2dcf601c8e7499b6bb2778180bfcaeb7cdfc648078b8e05348c6" "43c808b039893c885bdeec885b4f7572141bd9392da7f0bd8d8346e02b2ec8da" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "cc4e95929ebadaa3f2e9ac462b6594f02c41742efbe8505335f5a67b36cec21c" "4639288d273cbd3dc880992e6032f9c817f17c4a91f00f3872009a099f5b3f84" "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+ '(doom-modeline-mode t)
+ '(openwith-mode t)
  '(org-babel-load-languages
    (quote
     ((emacs-lisp . t)
@@ -332,8 +412,51 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
  '(package-selected-packages
    (quote
-    (buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
+    (dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
  '(zoom-size (quote (0.618 . 0.618))))
 
+
+(require 'exwm)
+(require 'exwm-config)
+
+
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(0 "eDPI" 1 "HDMI1"))
+(add-hook 'exwm-randr-screen-change-hook
+	  (lambda ()
+	    (start-process-shell-command
+	     "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x800 --rotate normal --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate left")))
+;;(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "HDMI1"))
+(exwm-randr-enable)
+
+(exwm-config-default)
+(setq exwm-workspace-number 2)
+
+;;(require 'exwm-systemtray)
+;;(exwm-systemtray-enable)
+;;(add-hook 'exwm-init-hook 'exwm-x/network-manager-applet t)
+;;(add-hook 'exwm-init-hook 'exwm-x/volit t)
+;;(add-hook 'exwm-init-hook 'exwm-x/power-manager t)
+;;(add-hook 'exwm-init-hook 'exwm-x/xscreensaver t)
+;;(add-hook 'exwm-init-hook 'exwm-x/xset-bell-off t)
+;;(add-hook 'exwm-init-hook 'exwm-x/xmodmap t)
+;; (window-divider-mode -1)
+;; (display-battery-mode 1)
+;; (display-time-mode 1)
+
+(require 'exwm-x)
+
+(ido-mode -1)
+;; (require 'exwmx-xfce)
+;; (require 'exwmx-example)
+;; (exwmx-input-set-key (kbd "C-t v") 'exwmx:file-browser)
+;; (exwmx-input-set-key (kbd "C-t f") 'exwmx:web-browser)
+;; (exwmx-input-set-key (kbd "C-t e") 'exwmx:emacs)
+;; (exwmx-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
+;; (exwmx-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
+;; (exwmx-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+;; (exwmx-input-set-key (kbd "C-t b") 'exwmx-switch-application)
+
+;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
 
 
