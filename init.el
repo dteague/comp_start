@@ -33,6 +33,8 @@
 (setq use-dialog-box nil)
 (setq exwm-floating-border-width 3)
 (setq exwm-floating-border-color "orange")
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; currently installed themes (only dark and doom ones) ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -412,7 +414,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
  '(package-selected-packages
    (quote
-    (dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
+    (mode-icons all-the-icons-ivy all-the-icons-dired dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
  '(zoom-size (quote (0.618 . 0.618))))
 
 
@@ -446,6 +448,8 @@
 
 (require 'exwm-x)
 
+()
+
 (ido-mode -1)
 ;; (require 'exwmx-xfce)
 ;; (require 'exwmx-example)
@@ -459,4 +463,18 @@
 
 ;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
 
+
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "Firefox"))
+              (exwm-layout-hide-mode-line))))
+(add-hook `dired-mode-hook `all-the-icons-dired-mode)
+
+(exwm-input-set-key (kbd "s-x") #'exwm-restart)
+(exwm-input-set-key (kbd "s-d") 'dmenu)
+(exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
+(exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
+(exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
+(exwm-input-set-key (kbd "M-o") 'ace-window)
 
