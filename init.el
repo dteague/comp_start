@@ -329,8 +329,43 @@
 
 (use-package dmenu
   :ensure t
+  )
+
+
+(use-package eyebrowse
+  :ensure t
+  :init
+  (setq eyebrowse-keymap-prefix (kbd "M-e"))
+  (global-unset-key (kbd "C-c C-w"))
   :config
-  (global-set-key (kbd "M-<return>") 'dmenu))
+  (eyebrowse-mode t))
+
+(defun setup-eyebrowseWS ()
+  (eyebrowse-rename-window-config 0 "desktop")
+  (eyebrowse-rename-window-config 1 "music")
+  (eyebrowse-rename-window-config 2 "local")
+  (eyebrowse-rename-window-config 3 "ssh")
+  )
+
+
+(defun setup-EBWS0 ()
+  (eyebrowse-switch-to-window-config-0)
+  (switch-to-buffer "*scratch*")
+
+  )
+(defun set-frame-alpha (arg &optional active)
+  (interactive "nEnter alpha value (1-100): \np")
+  (let* ((elt (assoc 'alpha default-frame-alist))
+         (old (frame-parameter nil 'alpha))
+         (new (cond ((atom old)     `(,arg ,arg))
+                    ((eql 1 active) `(,arg ,(cadr old)))
+                    (t              `(,(car old) ,arg)))))
+    (if elt (setcdr elt new) (push `(alpha ,@new) default-frame-alist))
+    (set-frame-parameter nil 'alpha new)))
+(global-set-key (kbd "C-c t") 'set-frame-alpha)
+
+(set-frame-alpha 100) 
+(set-frame-parameter nil 'alpha 90)
 
 ;; ;;;; NEED TO edit this to open correct stuff!
 ;; ;;https://bitbucket.org/jpkotta/openwith/src/default/README.txt
@@ -414,7 +449,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
  '(package-selected-packages
    (quote
-    (mode-icons all-the-icons-ivy all-the-icons-dired dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
+    (scratch scratch-ext eyebrowse mode-icons all-the-icons-ivy all-the-icons-dired dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
  '(zoom-size (quote (0.618 . 0.618))))
 
 
