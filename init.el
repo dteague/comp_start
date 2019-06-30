@@ -49,6 +49,12 @@
 ;; may make this file the set up script, but eh
 ;;(load "~/.emacs.d/my_ibuffer.el")
 
+(require 'org)
+(org-babel-load-file
+ (expand-file-name "packages.org"
+                   user-emacs-directory))
+
+
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  ____ __ __ __  __   ___ ______ __   ___   __  __  __  ;;
 ;; ||    || || ||\ ||  //   | || | ||  // \\  ||\ || (( \ ;;
@@ -121,238 +127,10 @@
             (kill-buffer ,buff))))))
 (add-hook 'term-exec-hook 'oleh-term-exec-hook)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; change opacity to make it look more slick ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ____   ___    ___ __ __  ___    ___   ____  __  ;;
-;; || \\ // \\  //   || // // \\  // \\ ||    (( \ ;;
-;; ||_// ||=|| ((    ||<<  ||=|| (( ___ ||==   \\  ;;
-;; ||    || ||  \\__ || \\ || ||  \\_|| ||___ \_)) ;;
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                Ace Window	                ;;
-;; Allows nice switching between frames/windows ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package ace-window
-  :config
-  (progn
-    (global-set-key (kbd "M-o") 'ace-window)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    (expose-global-binding-in-term (kbd "M-o"))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;       Elpy	        ;;
-;; Fancy python helper  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package elpy
-  :config
-  (progn
-    (elpy-enable)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                  Buffer move			        ;;
-;; Nice way to move buffers around to different windows ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package buffer-move
-  :config
-  (progn
-    (global-set-key (kbd "S-<left>")  'buf-move-left)
-    (global-set-key (kbd "S-<right>") 'buf-move-right)
-    (global-set-key (kbd "S-<up>")    'buf-move-up)
-    (global-set-key (kbd "S-<down>")  'buf-move-down)
-    ))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      eterm 256color	      ;;
-;; Make Ansi-term have color! ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package eterm-256color
-  :config
-  (eterm-256color-mode t)
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;           IBuffer		 ;;
-;; Makes Buffer look 100x better ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package ibuffer
-  :config
-  (global-set-key (kbd "C-x C-b")  'ibuffer))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                          God Mode				   ;;
-;; Allows for "modes" similar to vim and removes the need for Ctrl ;;
-;; bound to Ctrl-Enter						   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package god-mode
-  :config
-  (global-set-key (kbd "C-<return>") 'god-mode))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                 Company Mode			      ;;
-;; Autocomplete software			      ;;
-;; Needs clang so might switch (because of ssh stuff) ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-hook 'after-init-hook 'global-company-mode)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                          Avy				      ;;
-;; Package used for jumping to words/lines with asdf keys     ;;
-;; I only like the avy-goto-line (swiper works better for me) ;;
-;; and even goto-line is an iffy time saver...		      ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package avy
-  :config
-  (global-set-key (kbd "M-g M-g") 'avy-goto-line))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                  Swiper   (Needs Counsel)			      ;;
-;; Package for finding anything! Works with searching, buffer change, ;;
-;; finding of a file, and M-x stuff. Very pretty!		      ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; it looks like counsel is a requirement for swiper
-(use-package counsel)
-
-(use-package swiper
-  :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq enable-recursive-minibuffers t)
-    (global-set-key "\C-s" 'swiper)
-    (global-set-key (kbd "M-%") 'swiper-query-replace)
-    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-    (global-set-key (kbd "C-r") 'ivy-resume)
-    (global-set-key (kbd "<f6>") 'ivy-resume)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "M-y") 'counsel-yank-pop)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-load-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (global-set-key (kbd "C-c g") 'counsel-git)
-    (global-set-key (kbd "C-c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c k") 'counsel-ag)
-    (global-set-key (kbd "C-x l") 'counsel-locate)
-    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-    ))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                        SmartParens				    ;;
-;; Very finicky, but can be nice for not worrying about parentheses ;;
-;; Added C-' for moving paren forward 				    ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package smartparens
-  :config
-  (progn
-    (smartparens-global-mode t)
-    (global-set-key (kbd "C-'") 'sp-forward-slurp-sexp)
-    ))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                          Zoom				  ;;
-;; Has balancing of windows. Need to fix it with dired mode,	  ;;
-;; but looks nice. It's set to have a Golden Ratio, may change... ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (use-package zoom
-;;   :config
-;;   (progn
-;;     (zoom-mode t)
-;;     (custom-set-variables
-;;      '(zoom-size '(0.618 . 0.75)
-;; 		 ;;     '(zoom-ignored-major-modes '(dired-mode))
-;; 		 ))))
-
-(use-package aggressive-indent
-  :config
-  (progn
-    ;; Turned on everywhere, but can add exceptions below
-    (global-aggressive-indent-mode 1)
-    (add-to-list 'aggressive-indent-excluded-modes 'html-mode)))
-
-;;; Doesn't work with zoom on
-(use-package resize-window
-  :config
-  (progn
-    (global-set-key (kbd "C-c ;") 'resize-window)
-    ))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;             Doom Modeline		    ;;
-;; Changes the bottome line to look slicker ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
-  :config
-  (progn (setq find-file-visit-truename t)
-	 (setq doom-modeline-height 10)
-	 (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)))
-
-;;;;;;;;;;;;;;;;;;;;;;;
-;;     Magit	     ;;
-;; Git but in emacs! ;;
-;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package magit
-  :config
-  (global-set-key (kbd "C-x g") 'magit-status)
-  )
-
-
-(use-package rainbow-delimiters
-  :config
-  (progn
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'prog-mode-hook (show-paren-mode))))
-
-(set-face-background 'show-paren-match-face "#FFFFFF")
-
-(use-package dmenu
-  :ensure t
-  )
-
-
-(use-package eyebrowse
-  :ensure t
-  :init
-  (setq eyebrowse-keymap-prefix (kbd "M-e"))
-  (global-unset-key (kbd "C-c C-w"))
-  :config
-  (eyebrowse-mode t))
-
-(defun setup-eyebrowseWS ()
-  (eyebrowse-rename-window-config 0 "desktop")
-  (eyebrowse-rename-window-config 1 "music")
-  (eyebrowse-rename-window-config 2 "local")
-  (eyebrowse-rename-window-config 3 "ssh")
-  )
-
-
-(defun setup-EBWS0 ()
-  (eyebrowse-switch-to-window-config-0)
-  (switch-to-buffer "*scratch*")
-
-  )
 (defun set-frame-alpha (arg &optional active)
   (interactive "nEnter alpha value (1-100): \np")
   (let* ((elt (assoc 'alpha default-frame-alist))
@@ -364,16 +142,30 @@
     (set-frame-parameter nil 'alpha new)))
 (global-set-key (kbd "C-c t") 'set-frame-alpha)
 
-(set-frame-alpha 100) 
-(set-frame-parameter nil 'alpha 90)
+(set-frame-parameter nil 'alpha '(90 . 100))
 
-;; ;;;; NEED TO edit this to open correct stuff!
-;; ;;https://bitbucket.org/jpkotta/openwith/src/default/README.txt
-;; (use-package openwith
-;;   :ensure t
-;;   :config
-;;   (openwith-mode t)
-;;   )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Setup a desktop-esque environment (ie go transparent) ;;
+;; use to look at desktop picture			 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun desktop ()
+  (interactive)
+  (setq tmper (frame-parameter nil 'alpha))
+  ;; (setq tmp-alpha (car (frame-parameter nil 'alpha))
+  ;; 	(print tmp-alpha)
+  (eyebrowse-switch-to-window-config-0)
+  (switch-to-buffer "*scratch*")
+  (set-frame-parameter nil 'alpha 1)
+  (setq tmpabc nil)
+  (while (not (string= tmpabc "q"))
+    (setq tmpabc (read-key-sequence "")))
+  (set-frame-parameter nil 'alpha tmper)
+  )
+(global-set-key (kbd "M-]") 'desktop)
+
+
+
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -416,6 +208,7 @@
 (setq org-agenda-files (list "~/Desktop/TODO/"))
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+(setq org-src-fontify-natively t)
 (setq org-file-apps
       '(("\\.docx\\'" . default)
 	("\\.odt\\'" . default)
@@ -424,6 +217,8 @@
 	("\\.pdf\\'" . default)
 	("\\.pdf::\\([0-9]+\\)\\'" . "evince \"%s\" -p %1")
 	(auto-mode . emacs)))
+
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -453,63 +248,4 @@
  '(zoom-size (quote (0.618 . 0.618))))
 
 
-(require 'exwm)
-(require 'exwm-config)
-
-
-(require 'exwm-randr)
-(setq exwm-randr-workspace-output-plist '(0 "eDPI" 1 "HDMI1"))
-(add-hook 'exwm-randr-screen-change-hook
-	  (lambda ()
-	    (start-process-shell-command
-	     "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x800 --rotate normal --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate left")))
-;;(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "HDMI1"))
-(exwm-randr-enable)
-
-(exwm-config-default)
-(setq exwm-workspace-number 2)
-
-;;(require 'exwm-systemtray)
-;;(exwm-systemtray-enable)
-;;(add-hook 'exwm-init-hook 'exwm-x/network-manager-applet t)
-;;(add-hook 'exwm-init-hook 'exwm-x/volit t)
-;;(add-hook 'exwm-init-hook 'exwm-x/power-manager t)
-;;(add-hook 'exwm-init-hook 'exwm-x/xscreensaver t)
-;;(add-hook 'exwm-init-hook 'exwm-x/xset-bell-off t)
-;;(add-hook 'exwm-init-hook 'exwm-x/xmodmap t)
-;; (window-divider-mode -1)
-;; (display-battery-mode 1)
-;; (display-time-mode 1)
-
-(require 'exwm-x)
-
-()
-
-(ido-mode -1)
-;; (require 'exwmx-xfce)
-;; (require 'exwmx-example)
-;; (exwmx-input-set-key (kbd "C-t v") 'exwmx:file-browser)
-;; (exwmx-input-set-key (kbd "C-t f") 'exwmx:web-browser)
-;; (exwmx-input-set-key (kbd "C-t e") 'exwmx:emacs)
-;; (exwmx-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
-;; (exwmx-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
-;; (exwmx-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
-;; (exwmx-input-set-key (kbd "C-t b") 'exwmx-switch-application)
-
-;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
-
-
-(add-hook 'exwm-manage-finish-hook
-          (lambda ()
-            (when (and exwm-class-name
-                       (string= exwm-class-name "Firefox"))
-              (exwm-layout-hide-mode-line))))
-(add-hook `dired-mode-hook `all-the-icons-dired-mode)
-
-(exwm-input-set-key (kbd "s-x") #'exwm-restart)
-(exwm-input-set-key (kbd "s-d") 'dmenu)
-(exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
-(exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
-(exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
-(exwm-input-set-key (kbd "M-o") 'ace-window)
 

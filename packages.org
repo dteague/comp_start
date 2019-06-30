@@ -1,0 +1,345 @@
+# ;; ____   ___    ___ __ __  ___    ___   ____  __  ;;
+# ;; || \\ // \\  //   || // // \\  // \\ ||    (( \ ;;
+# ;; ||_// ||=|| ((    ||<<  ||=|| (( ___ ||==   \\  ;;
+# ;; ||    || ||  \\__ || \\ || ||  \\_|| ||___ \_)) ;;
+#  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+* AceWindow
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;;                Ace Window	                ;;
+# ;; Allows nice switching between frames/windows ;;
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :config
+  (progn
+    (global-set-key (kbd "M-o") 'ace-window)
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (expose-global-binding-in-term (kbd "M-o"))))
+#+END_SRC
+
+* Elpy
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;       Elpy	        ;;
+;; Fancy python helper  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package elpy
+  :config
+  (progn
+    (elpy-enable)))
+#+END_SRC
+
+* Buffer Move
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;;                  Buffer move			  ;;
+# ;; Nice way to move buffers around to different windows ;;
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+BEGIN_SRC emacs-lisp
+(use-package buffer-move
+  :config
+  (progn
+    (global-set-key (kbd "S-<left>")  'buf-move-left)
+    (global-set-key (kbd "S-<right>") 'buf-move-right)
+    (global-set-key (kbd "S-<up>")    'buf-move-up)
+    (global-set-key (kbd "S-<down>")  'buf-move-down)
+    ))
+#+END_SRC
+
+* Eterm 256 color
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;;      eterm 256color	      ;;
+# ;; Make Ansi-term have color! ;;
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+BEGIN_SRC emacs-lisp
+(use-package eterm-256color
+  :config
+  (eterm-256color-mode t)
+  )
+#+END_SRC
+
+* IBuffer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;           IBuffer		 ;;
+;; Makes Buffer look 100x better ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package ibuffer
+  :config
+  (global-set-key (kbd "C-x C-b")  'ibuffer))
+#+END_SRC
+
+* God Mode
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                          God Mode				   ;;
+;; Allows for "modes" similar to vim and removes the need for Ctrl ;;
+;; bound to Ctrl-Enter						   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package god-mode
+  :config
+  (global-set-key (kbd "C-<return>") 'god-mode))
+#+END_SRC
+
+* Company Mode
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                 Company Mode			      ;;
+;; Autocomplete software			      ;;
+;; Needs clang so might switch (because of ssh stuff) ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+
+* Avy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                          Avy				      ;;
+;; Package used for jumping to words/lines with asdf keys     ;;
+;; I only like the avy-goto-line (swiper works better for me) ;;
+;; and even goto-line is an iffy time saver...		      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :config
+  (global-set-key (kbd "M-g M-g") 'avy-goto-line))
+#+END_SRC
+
+* Swiper
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                  Swiper   (Needs Counsel)			      ;;
+;; Package for finding anything! Works with searching, buffer change, ;;
+;; finding of a file, and M-x stuff. Very pretty!		      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+;; it looks like counsel is a requirement for swiper
+(use-package counsel)
+
+(use-package swiper
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "M-%") 'swiper-query-replace)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-r") 'ivy-resume)
+    (global-set-key (kbd "<f6>") 'ivy-resume)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "M-y") 'counsel-yank-pop)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-load-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
+#+END_SRC
+
+* Smart Parens
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                        SmartParens				    ;;
+;; Very finicky, but can be nice for not worrying about parentheses ;;
+;; Added C-' for moving paren forward 				    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  :config
+  (progn
+    (smartparens-global-mode t)
+    (global-set-key (kbd "C-'") 'sp-forward-slurp-sexp)
+    ))
+#+END_SRC
+
+* Zoom
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                          Zoom				  ;;
+;; Has balancing of windows. Need to fix it with dired mode,	  ;;
+;; but looks nice. It's set to have a Golden Ratio, may change... ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+;; (use-package zoom
+;;   :config
+;;   (progn
+;;     (zoom-mode t)
+;;     (custom-set-variables
+;;      '(zoom-size '(0.618 . 0.75)
+;; 		 ;;     '(zoom-ignored-major-modes '(dired-mode))
+;; 		 ))))
+
+#+END_SRC
+
+* Aggressive Indent
+#+BEGIN_SRC emacs-lisp
+(use-package aggressive-indent
+  :config
+  (progn
+    ;; Turned on everywhere, but can add exceptions below
+    (global-aggressive-indent-mode 1)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode)))
+#+END_SRC
+
+* Resize Window
+#+BEGIN_SRC emacs-lisp
+;;; Doesn't work with zoom on
+(use-package resize-window
+  :config
+  (progn
+    (global-set-key (kbd "C-c ;") 'resize-window)
+    ))
+#+END_SRC
+
+<* Doom Modeline
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;             Doom Modeline		    ;;
+;; Changes the bottome line to look slicker ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (progn (setq find-file-visit-truename t)
+	 (setq doom-modeline-height 10)
+	 (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)))
+
+#+END_SRC
+
+* Magit
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;     Magit	     ;;
+;; Git but in emacs! ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status)
+  )
+#+END_SRC
+
+* Rainbow Delimiters
+
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'prog-mode-hook (show-paren-mode))))
+
+(set-face-background 'show-paren-match-face "#FFFFFF")
+#+END_SRC
+
+* Dmenu
+#+BEGIN_SRC emacs-lisp
+(use-package dmenu
+  :ensure t
+  )
+#+END_SRC
+
+* Eyebrowse
+#+BEGIN_SRC emacs-lisp
+(use-package eyebrowse
+  :ensure t
+  :init
+  (setq eyebrowse-keymap-prefix (kbd "M-e"))
+  (global-unset-key (kbd "C-c C-w"))
+  :config
+  (eyebrowse-mode t))
+
+
+(defun setup-eyebrowseWS ()
+  (eyebrowse-rename-window-config 0 "desktop")
+  (eyebrowse-switch-to-window-config-0)
+  (switch-to-buffer "*scratch*")
+  (eyebrowse-rename-window-config 1 "music")
+  (eyebrowse-rename-window-config 2 "local")
+  (eyebrowse-rename-window-config 3 "ssh")
+  )
+#+END_SRC
+
+
+
+# * EXWM
+# #+BEGIN_SRC emacs-lisp 
+# (require 'exwm)
+# (require 'exwm-config)
+
+# (require 'exwm-randr)
+# (setq exwm-randr-workspace-output-plist '(0 "eDPI" 1 "HDMI1"))
+# (add-hook 'exwm-randr-screen-change-hook
+# 	  (lambda ()
+# 	    (start-process-shell-command
+# 	     "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x800 --rotate normal --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate left")))
+# ;;(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "HDMI1"))
+# (exwm-randr-enable)
+
+# (exwm-config-default)
+# (setq exwm-workspace-number 2)
+
+# ;;(require 'exwm-systemtray)
+# ;;(exwm-systemtray-enable)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/network-manager-applet t)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/volit t)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/power-manager t)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/xscreensaver t)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/xset-bell-off t)
+# ;;(add-hook 'exwm-init-hook 'exwm-x/xmodmap t)
+# ;; (window-divider-mode -1)
+# ;; (display-battery-mode 1)
+# ;; (display-time-mode 1)
+
+# (require 'exwm-x)
+
+# (ido-mode -1)
+# ;; (require 'exwmx-xfce)
+# ;; (require 'exwmx-example)
+# ;; (exwmx-input-set-key (kbd "C-t v") 'exwmx:file-browser)
+# ;; (exwmx-input-set-key (kbd "C-t f") 'exwmx:web-browser)
+# ;; (exwmx-input-set-key (kbd "C-t e") 'exwmx:emacs)
+# ;; (exwmx-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
+# ;; (exwmx-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
+# ;; (exwmx-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+# ;; (exwmx-input-set-key (kbd "C-t b") 'exwmx-switch-application)
+
+# ;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
+
+
+# (add-hook 'exwm-manage-finish-hook
+#           (lambda ()
+#             (when (and exwm-class-name
+#                        (string= exwm-class-name "Firefox"))
+#               (exwm-layout-hide-mode-line))))
+# (add-hook `dired-mode-hook `all-the-icons-dired-mode)
+
+# (exwm-input-set-key (kbd "s-x") #'exwm-restart)
+# (exwm-input-set-key (kbd "s-d") 'dmenu)
+# (exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
+# (exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
+# (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
+# (exwm-input-set-key (kbd "M-o") 'ace-window)
+# #+END_SRC
