@@ -12,14 +12,23 @@
 # ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :config
-  (progn
-    (global-set-key (kbd "M-o") 'ace-window)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    (expose-global-binding-in-term (kbd "M-o"))))
-#+END_SRC
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Allow certain functions to work in terminal ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  (require 'term)
+  (defun expose-global-binding-in-term (binding)
+    (define-key term-raw-map binding 
+      (lookup-key (current-global-map) binding)))
+
+  (use-package ace-window
+    :config
+    (progn
+      (global-set-key (kbd "M-o") 'ace-window)
+      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+      (expose-global-binding-in-term (kbd "M-o"))))
+#+END_SRC
+  
 * Elpy
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;       Elpy	        ;;
@@ -167,6 +176,7 @@
   :config
   (progn
     (smartparens-global-mode t)
+    (require 'smartparens-config)
     (global-set-key (kbd "C-'") 'sp-forward-slurp-sexp)
     ))
 #+END_SRC
@@ -263,83 +273,119 @@
 
 * Eyebrowse
 #+BEGIN_SRC emacs-lisp
+(defun setup-eyebrowseWS ()
+  (interactive)
+
+  ;; number 0
+  (eyebrowse-switch-to-window-config-0)
+  (eyebrowse-rename-window-config 0 "desktop")
+  (switch-to-buffer "*scratch*")
+
+  ;; number 1
+  (eyebrowse-switch-to-window-config-1)
+  (eyebrowse-rename-window-config 2 "local")
+  (delete-other-windows)
+  (split-window-below)
+  (dired "~")
+  (switch-window)
+  (terminal)
+  (switch-to-buffer "*ansi-term*")
+  
+  ;; number 2
+  (eyebrowse-switch-to-window-config-2)
+  (eyebrowse-rename-window-config 3 "ssh")
+  (delete-other-windows)
+  (switch-to-buffer "*scratch*")
+  
+  ;; number 3 
+  (eyebrowse-switch-to-window-config-3)
+  (eyebrowse-rename-window-config 4 "org")
+  (delete-other-windows)
+  (dired "~/Desktop/TODO")
+  (split-window-below)
+  (find-file-other-window (format-time-string "~/Desktop/TODO/%Y%U_notes.org"))
+
+  (eyebrowse-switch-to-window-config-0)
+  )
+
 (use-package eyebrowse
   :ensure t
   :init
   (setq eyebrowse-keymap-prefix (kbd "M-e"))
   (global-unset-key (kbd "C-c C-w"))
   :config
-  (eyebrowse-mode t))
+  (progn
+    (eyebrowse-mode t)
 
-
-(defun setup-eyebrowseWS ()
-  (eyebrowse-rename-window-config 0 "desktop")
-  (eyebrowse-switch-to-window-config-0)
-  (switch-to-buffer "*scratch*")
-  (eyebrowse-rename-window-config 1 "music")
-  (eyebrowse-rename-window-config 2 "local")
-  (eyebrowse-rename-window-config 3 "ssh")
-  )
+    ))
 #+END_SRC
 
-
-
+* Not Implimented
 # * EXWM
 # #+BEGIN_SRC emacs-lisp 
-# (require 'exwm)
-# (require 'exwm-config)
+#   (require 'exwm)
+#   (require 'exwm-config)
 
-# (require 'exwm-randr)
-# (setq exwm-randr-workspace-output-plist '(0 "eDPI" 1 "HDMI1"))
-# (add-hook 'exwm-randr-screen-change-hook
-# 	  (lambda ()
-# 	    (start-process-shell-command
-# 	     "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x800 --rotate normal --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate left")))
-# ;;(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "HDMI1"))
-# (exwm-randr-enable)
+#   (require 'exwm-randr)
+#   (setq exwm-randr-workspace-output-plist '(0 "eDPI" 1 "HDMI1"))
+#   (add-hook 'exwm-randr-screen-change-hook
+# 	    (lambda ()
+# 	      (start-process-shell-command
+# 	       "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x800 --rotate normal --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate left")))
+#   ;;(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "HDMI1"))
+#   (exwm-randr-enable)
 
-# (exwm-config-default)
-# (setq exwm-workspace-number 2)
+#   (exwm-config-default)
+#   (setq exwm-workspace-number 2)
 
-# ;;(require 'exwm-systemtray)
-# ;;(exwm-systemtray-enable)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/network-manager-applet t)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/volit t)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/power-manager t)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/xscreensaver t)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/xset-bell-off t)
-# ;;(add-hook 'exwm-init-hook 'exwm-x/xmodmap t)
-# ;; (window-divider-mode -1)
-# ;; (display-battery-mode 1)
-# ;; (display-time-mode 1)
+#   ;;(require 'exwm-systemtray)
+#   ;;(exwm-systemtray-enable)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/network-manager-applet t)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/volit t)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/power-manager t)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/xscreensaver t)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/xset-bell-off t)
+#   ;;(add-hook 'exwm-init-hook 'exwm-x/xmodmap t)
+#   ;; (window-divider-mode -1)
+#   ;; (display-battery-mode 1)
+#   ;; (display-time-mode 1)
 
-# (require 'exwm-x)
+#   (require 'exwm-x)
 
-# (ido-mode -1)
-# ;; (require 'exwmx-xfce)
-# ;; (require 'exwmx-example)
-# ;; (exwmx-input-set-key (kbd "C-t v") 'exwmx:file-browser)
-# ;; (exwmx-input-set-key (kbd "C-t f") 'exwmx:web-browser)
-# ;; (exwmx-input-set-key (kbd "C-t e") 'exwmx:emacs)
-# ;; (exwmx-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
-# ;; (exwmx-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
-# ;; (exwmx-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
-# ;; (exwmx-input-set-key (kbd "C-t b") 'exwmx-switch-application)
+#   (ido-mode -1)
+#   ;; (require 'exwmx-xfce)
+#   ;; (require 'exwmx-example)
+#   ;; (exwmx-input-set-key (kbd "C-t v") 'exwmx:file-browser)
+#   ;; (exwmx-input-set-key (kbd "C-t f") 'exwmx:web-browser)
+#   ;; (exwmx-input-set-key (kbd "C-t e") 'exwmx:emacs)
+#   ;; (exwmx-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
+#   ;; (exwmx-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
+#   ;; (exwmx-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+#   ;; (exwmx-input-set-key (kbd "C-t b") 'exwmx-switch-application)
 
-# ;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
+#   ;; (exwmx-input-set-key (kbd "C-t C-f") 'exwmx-floating-toggle-floating)
 
 
-# (add-hook 'exwm-manage-finish-hook
-#           (lambda ()
-#             (when (and exwm-class-name
-#                        (string= exwm-class-name "Firefox"))
-#               (exwm-layout-hide-mode-line))))
-# (add-hook `dired-mode-hook `all-the-icons-dired-mode)
+#   (add-hook 'exwm-manage-finish-hook
+# 	    (lambda ()
+# 	      (when (and exwm-class-name
+# 			 (string= exwm-class-name "Firefox"))
+# 		(exwm-layout-hide-mode-line))))
+#   (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
+		
+#   (add-hook 'exwm-manage-finish-hook
+# 	    (lambda ()
+# 	      (when (and exwm-class-name
+# 			 (string= exwm-class-name "ROOT"))
+# 		(exwm-floating-toggle-floating))))
 
-# (exwm-input-set-key (kbd "s-x") #'exwm-restart)
-# (exwm-input-set-key (kbd "s-d") 'dmenu)
-# (exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
-# (exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
-# (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
-# (exwm-input-set-key (kbd "M-o") 'ace-window)
+
+#   (exwm-input-set-key (kbd "s-x") #'exwm-restart)
+#   (exwm-input-set-key (kbd "s-d") 'helm-run-external-command)
+#   (exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
+#   (exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
+#   (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
+#   (exwm-input-set-key (kbd "M-o") 'ace-window)
+#   (exwm-input-set-key (kbd "C-c M-.") 'eyebrowse-switch-to-window-config)
 # #+END_SRC
+

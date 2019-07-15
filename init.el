@@ -17,6 +17,8 @@
 (setq inhibit-startup-screen t)
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
+
+;;(package-install 'org-plus-contrib)
 ;;;;;;;;;;;;;;;;;;;;
 ;; Setup of Theme ;;
 ;;;;;;;;;;;;;;;;;;;;
@@ -34,6 +36,7 @@
 (setq exwm-floating-border-width 3)
 (setq exwm-floating-border-color "orange")
 
+(global-prettify-symbols-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; currently installed themes (only dark and doom ones) ;;
@@ -83,6 +86,7 @@
 (setq diredp-hide-details-initially-flag nil)
 (setq diredp-hide-details-propagate-flag nil)
 (diredp-toggle-find-file-reuse-dir 1)
+(add-hook `dired-mode-hook `all-the-icons-dired-mode)
 
 (defun dired-open-term ()
   ;;   "Open an `ansi-term' that corresponds to current directory."
@@ -103,15 +107,6 @@
 (define-key dired-mode-map (kbd "`") 'dired-open-term)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Allow certain functions to work in terminal ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'term)
-(defun expose-global-binding-in-term (binding)
-  (define-key term-raw-map binding 
-    (lookup-key (current-global-map) binding)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Command to kill terminal buffer after it's finished ;;
@@ -142,7 +137,7 @@
     (set-frame-parameter nil 'alpha new)))
 (global-set-key (kbd "C-c t") 'set-frame-alpha)
 
-(set-frame-parameter nil 'alpha '(90 . 100))
+(set-frame-parameter nil 'alpha '(90 . 80))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup a desktop-esque environment (ie go transparent) ;;
@@ -199,12 +194,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(fixed-pitch ((t (:family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal))))
+ '(org-block ((t (:inherit fixed-pitch))))
+ '(org-document-info ((t (:foreground "dark orange"))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-link ((t (:foreground "royal blue" :underline t))))
+ '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+ '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set up Org mode things ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(define-key org-mode-map (kbd "C-'") nil)
 (setq org-agenda-files (list "~/Desktop/TODO/"))
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -218,7 +224,34 @@
 	("\\.pdf::\\([0-9]+\\)\\'" . "evince \"%s\" -p %1")
 	(auto-mode . emacs)))
 
+(setq org-hide-emphasis-markers t)
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; (custom-theme-set-faces
+;;  'user
+;;  '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
+;;  '(fixed-pitch ((t ( :family "Inconsolata" :slant normal :weight normal :height 1.0 :width normal)))))
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
 
+(custom-theme-set-faces
+ 'user
+ '(org-block                 ((t (:inherit fixed-pitch))))
+ '(org-document-info         ((t (:foreground "dark orange"))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-link                  ((t (:foreground "royal blue" :underline t))))
+ '(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value        ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+ '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(global-set-key (kbd "C-x r i") 'string-insert-rectangle)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -244,8 +277,13 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
  '(package-selected-packages
    (quote
-    (scratch scratch-ext eyebrowse mode-icons all-the-icons-ivy all-the-icons-dired dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
+    (company-auctex latex-pretty-symbols projectile avy-flycheck flycheck 0blayout pretty-mode desktop-environment org-chef org-journal org-password-manager org-bullets scratch scratch-ext eyebrowse mode-icons all-the-icons-ivy all-the-icons-dired dmenu exwm-x exwm lorem-ipsum irony rainbow-delimiters doom-themes eterm-256color quelpa-use-package quelpa god-mode dired+ buffer-move dired-x ace-jump-mode doom-modeline zoom window-number use-package try tramp-term smex smartparens resize-window pdf-tools ox-gfm org-beautify-theme org-babel-eval-in-repl openwith multiple-cursors minesweeper markdown-mode+ magit ibuffer-tramp helm google-translate fit-frame evil elpy dracula-theme csv-mode counsel celestial-mode-line auctex aggressive-indent adaptive-wrap)))
  '(zoom-size (quote (0.618 . 0.618))))
+
+
+;; setup final look
+
+(setup-eyebrowseWS)
 
 
 
