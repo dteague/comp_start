@@ -18,10 +18,20 @@
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
 
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward)
+
 ;;(package-install 'org-plus-contrib)
 ;;;;;;;;;;;;;;;;;;;;
 ;; Setup of Theme ;;
 ;;;;;;;;;;;;;;;;;;;;
+;; Set default font
+(set-face-attribute 'default nil
+                    :family "Fira Mono"
+                    :height 100
+                    :weight 'normal
+                    :width 'normal)
+
 
 ;; need for doom modeline to work correctly
 (use-package doom-themes)
@@ -74,7 +84,7 @@
   (interactive)
   (if (get-buffer "*ansi-term*")
       (switch-to-buffer "*ansi-term*")
-    (ansi-term "/bin/zsh"))
+    (ansi-term "/bin/bash"))
   (get-buffer-process "*ansi-term*"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -211,7 +221,7 @@
 ;; Set up Org mode things ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-key org-mode-map (kbd "C-'") nil)
-(setq org-agenda-files (list "~/Desktop/TODO/"))
+(setq org-agenda-files (list "~/org-todo/"))
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (setq org-src-fontify-natively t)
@@ -260,7 +270,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "9954ed41d89d2dcf601c8e7499b6bb2778180bfcaeb7cdfc648078b8e05348c6" "43c808b039893c885bdeec885b4f7572141bd9392da7f0bd8d8346e02b2ec8da" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "cc4e95929ebadaa3f2e9ac462b6594f02c41742efbe8505335f5a67b36cec21c" "4639288d273cbd3dc880992e6032f9c817f17c4a91f00f3872009a099f5b3f84" "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+    ("249f23540cc235fde8dd2035f1cca23f18e6817650c86765a1b808f3a3712a87" "6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "9954ed41d89d2dcf601c8e7499b6bb2778180bfcaeb7cdfc648078b8e05348c6" "43c808b039893c885bdeec885b4f7572141bd9392da7f0bd8d8346e02b2ec8da" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "cc4e95929ebadaa3f2e9ac462b6594f02c41742efbe8505335f5a67b36cec21c" "4639288d273cbd3dc880992e6032f9c817f17c4a91f00f3872009a099f5b3f84" "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(doom-modeline-mode t)
  '(openwith-mode t)
  '(org-babel-load-languages
@@ -269,7 +279,7 @@
      (C . t)
      (css . t)
      (ruby . t)
-     (sh . t)
+     (shell . t)
      (awk . t)
      (R . t))))
  '(org-modules
@@ -284,6 +294,14 @@
 ;; setup final look
 
 (setup-eyebrowseWS)
+
+(use-package all-the-icons
+  :ensure t
+  ;;  :config (all-the-icons-install-fonts)
+  )
+(use-package all-the-icons-ivy
+  :init (all-the-icons-ivy-setup))
+
 
 
 
