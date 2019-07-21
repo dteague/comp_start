@@ -81,20 +81,6 @@
   (global-set-key (kbd "C-x C-b")  'ibuffer))
 #+END_SRC
 
-* God Mode
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                          God Mode				   ;;
-;; Allows for "modes" similar to vim and removes the need for Ctrl ;;
-;; bound to Ctrl-Enter						   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#+BEGIN_SRC emacs-lisp
-(use-package god-mode
-  :config
-  (global-set-key (kbd "C-<return>") 'god-mode))
-#+END_SRC
-
 * Company Mode
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -171,13 +157,15 @@
 ;; Added C-' for moving paren forward 				    ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :config
-  (progn
+  (use-package smartparens
+    :config
     (smartparens-global-mode t)
     (require 'smartparens-config)
     (global-set-key (kbd "C-'") 'sp-forward-slurp-sexp)
-    ))
+    (global-set-key (kbd "C-(") 'sp-wrap-round)
+;;    (global-set-key (kbd "C-[") 'sp-wrap-square)
+    (global-set-key (kbd "C-{") 'sp-wrap-curly)
+    )
 #+END_SRC
 
 * Zoom

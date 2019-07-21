@@ -59,9 +59,20 @@
 
 
 (exwm-input-set-key (kbd "s-x") #'exwm-restart)
-(exwm-input-set-key (kbd "s-d") 'helm-run-external-command)
+(exwm-input-set-key (kbd "s-d") 'counsel-linux-app)
 (exwm-input-set-key (kbd "s-t") #'exwm-floating-toggle-floating)
 (exwm-input-set-key (kbd "s-s") #'exwm-workspace-switch-to-buffer)
 (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
 (exwm-input-set-key (kbd "M-o") 'ace-window)
 (exwm-input-set-key (kbd "C-c M-.") 'eyebrowse-switch-to-window-config)
+
+(add-hook 'exwm-update-title-hook
+	  (lambda () (if (string= (buffer-name) "St")
+		    (rename-buffer (replace-regexp-in-string "\n$" "" (shell-command-to-string "ps -o cmd -C st | tail -n 1 | cut -d ' ' -f 3"))))))
+
+
+;; (add-hook exwm-update-title-hook
+;; 	  (lambda ()
+;; 	    (when))
+
+;; 	  )

@@ -128,7 +128,7 @@
     (set-process-sentinel
      proc
      `(lambda (process event)
-        (if (or (string= event "finished\n") (string= event "logout\n"))
+        (if (or (string= event "finished\n") (string= event "exit\n") (string= event "logout\n"))
             (kill-buffer ,buff))))))
 (add-hook 'term-exec-hook 'oleh-term-exec-hook)
 
@@ -297,11 +297,47 @@
 
 (use-package all-the-icons
   :ensure t
+  :config ;;;###autoload
+  (defun all-the-icons-icon-for-exwm (name &rest arg-overrides)
+    (let* ((icon (all-the-icons-match-to-alist name all-the-icons-exwm-alist))
+	   (args (cdr icon)))
+      (if icon (apply (car icon) args))
+      ))
+  (defvar all-the-icons-exwm-alist
+    '(("firefox" all-the-icons-faicon "firefox" :vadjust 0.0 :face all-the-icons-red)
+      ("spotify" all-the-icons-faicon "spotify" :vadjust 0.0 :face all-the-icons-green)
+      ("skype" all-the-icons-faicon "skype" :vadjust -1.0 :face all-the-icons-lblue)
+      ("nmtui" all-the-icons-faicon "wifi" :face all-the-icons-lsilver)
+      ("calcurse" all-the-icons-faicon "calendar" :face all-the-icons-lyellow)
+      ))
+
   ;;  :config (all-the-icons-install-fonts)
   )
+
+
+
+
 (use-package all-the-icons-ivy
-  :init (all-the-icons-ivy-setup))
+  :init 
+  (all-the-icons-ivy-setup)
+  :config
+  (defun all-the-icons-ivy--buffer-transformer (b s)
+    "Return a candidate string for buffer B named S preceded by an icon.
+Try to find the icon for the buffer's B `major-mode'.
+If that fails look for an icon for the mode that the `major-mode' is derived from."
+    (let ((mode (buffer-local-value 'major-mode b)))
+      (format (concat "%s" all-the-icons-spacer "%s")
+	      (propertize "\t" 'display (or
+					 (all-the-icons-icon-for-exwm (downcase s))
+					 (all-the-icons-ivy--icon-for-mode mode)
+					 (all-the-icons-ivy--icon-for-mode (get mode 'derived-mode-parent))
+					 (funcall
+					  all-the-icons-ivy-family-fallback-for-buffer
+					  all-the-icons-ivy-name-fallback-for-buffer)))
+	      (all-the-icons-ivy--buffer-propertize b s)))))
 
 
 
 
+
+;;(shell-command-to-string "ps -o cmd -C st")
