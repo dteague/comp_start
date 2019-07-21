@@ -1,0 +1,11 @@
+[Desktop Entry] 
+Name=nmtui
+GenericName=Wifi GUI
+Comment=Connects to the Internet
+Exec=/usr/local/bin/st -e nmtui
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=Network
+StartupWMClass=nmtui
+

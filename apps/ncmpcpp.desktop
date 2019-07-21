@@ -1,0 +1,10 @@
+[Desktop Entry] 
+Name=ncmpcpp
+GenericName=Music Player
+Exec=/usr/local/bin/st -e ncmpcpp
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=Network
+StartupWMClass=ncmpcpp
+

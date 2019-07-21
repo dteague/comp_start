@@ -1,0 +1,9 @@
+[Desktop Entry] 
+Name=alsamixer
+GenericName=Volume Control
+Exec=/usr/local/bin/st -e alsamixer
+Terminal=false
+Type=Application
+StartupNotify=false
+StartupWMClass=alsamixer
+

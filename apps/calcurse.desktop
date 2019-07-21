@@ -1,0 +1,9 @@
+[Desktop Entry] 
+Name=calcurse
+GenericName=Calender
+Exec=/usr/local/bin/st -e calcurse
+Terminal=false
+Type=Application
+StartupNotify=false
+StartupWMClass=calcurse
+
